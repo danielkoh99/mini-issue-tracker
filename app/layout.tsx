@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import QueryProvider from "./providers/queryProvider";
+import { Header } from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Mini Issue Tracker",
@@ -13,9 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="max-w-full h-screen p-5">
-        <h1>Mini Issue Tracker</h1>
-        <QueryProvider>{children}</QueryProvider>
+      <body className="h-screen flex flex-col">
+        <Header />
+        <QueryProvider>
+          <main className="flex-1 overflow-auto">{children}</main>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import QueryProvider from "./providers/queryProvider";
-import { Header } from "./components/Header";
+import { Header } from "@/components/ui/Header";
 
 export const metadata: Metadata = {
   title: "Mini Issue Tracker",

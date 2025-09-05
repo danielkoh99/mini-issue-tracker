@@ -1,8 +1,8 @@
 "use client";
 
-import { Error } from "../components/Error";
-import { SingleIssue } from "../components/issues/SingleIssue";
+import { Error } from "@/components/ui/Error";
 import { useIssues } from "../hooks/useIssues";
+import { SingleIssue } from "./components/SingleIssue";
 
 export default function Home() {
   const { data, isLoading, error } = useIssues();

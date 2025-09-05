@@ -29,7 +29,6 @@ export const IssueStatus: React.FC<StatusProps> = ({ status, id }) => {
   const getStatusColor = (s: Status) =>
     statusColors[s] ?? "bg-gray-100 text-gray-800";
   const handleSelectStatus = (option: Status) => () => {
-    console.log(option);
     mutate({ id, status: option });
   };
 

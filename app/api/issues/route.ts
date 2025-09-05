@@ -1,4 +1,5 @@
 import { Status } from "@/app/generated/prisma";
+import { IssueCreateSchema } from "@/app/types/issue";
 import prisma from "@/prisma/client";
 import { NextResponse } from "next/server";
 
@@ -11,7 +12,12 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const { title, description } = await req.json();
+  const json = await req.json();
+  const parsed = IssueCreateSchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.message }, { status: 400 });
+  }
+  const { title, description } = parsed.data;
   const issue = await prisma.issue.create({
     data: { title, description, status: Status.OPEN },
   });

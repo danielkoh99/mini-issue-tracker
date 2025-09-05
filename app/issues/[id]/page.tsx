@@ -1,86 +1,143 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 import { useGetSingleIssue, useUpdateIssue } from "@/app/hooks/useIssues";
-import { Issue, Status } from "@/app/generated/prisma";
+import { Status } from "@/app/generated/prisma";
 import { NotFound } from "@/components/ui/NotFound";
 import { Error } from "@/components/ui/Error";
-
+import { IssueSkeleton } from "../components/SingleIssueSkeleton";
+import Link from "next/link";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { IssueUpdateInput, IssueUpdateSchema } from "@/app/types/issue";
+import z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@radix-ui/react-select";
+import { EditableField } from "@/components/ui/EditableField";
 const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
 
   const { data: issue, error, isLoading } = useGetSingleIssue(id);
   const { mutate } = useUpdateIssue();
-  const [form, setForm] = useState<Partial<Issue>>({
-    title: "",
-    description: "",
-    status: Status.OPEN,
+
+  const form = useForm<IssueUpdateInput>({
+    resolver: zodResolver(IssueUpdateSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      status: Status.OPEN,
+    },
   });
-
   useEffect(() => {
-    if (issue) setForm(issue);
-  }, [issue]);
+    if (issue) {
+      form.reset({
+        title: issue.title,
+        description: issue.description,
+        status: issue.status,
+      });
+    }
+  }, [issue, form]);
+  function onSubmit(values: z.infer<typeof IssueUpdateSchema>) {
+    mutate({ id, ...values });
+  }
   if (error) return <Error>{error.message}</Error>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <IssueSkeleton />;
   if (!issue) return <NotFound>Issue not found</NotFound>;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutate({ id, ...form });
-  };
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Edit Issue</h1>
+      <div className="flex flex-col justify-between items-start mb-4">
+        <p className="text-gray-500 underline">
+          <Link href="/issues" className="text-cyan-600 hover:text-cyan-800">
+            Go back to Issues
+          </Link>
+        </p>
+        <h1 className="text-2xl font-bold mb-4">Edit Issue</h1>
+      </div>
 
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-          className="border rounded p-2"
-          placeholder="Title"
-          required
-        />
-        <textarea
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          className="border rounded p-2"
-          placeholder="Description"
-          required
-        />
-        <div>
-          <label className="mr-2 font-semibold">Status:</label>
-          <select
-            value={form.status}
-            onChange={(e) =>
-              setForm({ ...form, status: e.target.value as Issue["status"] })
-            }
-            className="border rounded p-2"
-          >
-            <option value="OPEN">Open</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="CLOSED">Closed</option>
-          </select>
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-            onClick={() => router.push("/issues")}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <EditableField value={field.value} name="title" form={form} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <EditableField
+                    value={field.value}
+                    type="textarea"
+                    name="description"
+                    form={form}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Select {...field}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="OPEN">Open</SelectItem>
+                      <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                      <SelectItem value="CLOSED">Closed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex gap-2">
+            <Button type="submit" variant="default">
+              Save
+            </Button>
+          </div>
+        </form>
+      </Form>
 
       <p className="text-gray-500 text-sm mt-4">
         Created: {new Date(issue.createdAt).toLocaleString()} | Updated:{" "}

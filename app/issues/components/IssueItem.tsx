@@ -1,10 +1,10 @@
 import { Issue } from "@/app/generated/prisma";
 import { IssueStatus } from "./IssueState";
 import { useRouter } from "next/navigation";
-interface SingleIssueProps {
+interface IssueItemProps {
   issue: Issue;
 }
-export const SingleIssue: React.FC<SingleIssueProps> = ({ issue }) => {
+export const IssueItem: React.FC<IssueItemProps> = ({ issue }) => {
   const router = useRouter();
   const routeToIssue = () => {
     router.push(`/issues/${issue.id}`);

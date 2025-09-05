@@ -12,12 +12,3 @@ CREATE TABLE "public"."Issue" (
 
     CONSTRAINT "Issue_pkey" PRIMARY KEY ("id")
 );
-
--- CreateTable
-CREATE TABLE "public"."User" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
-);

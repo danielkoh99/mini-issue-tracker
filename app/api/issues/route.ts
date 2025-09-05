@@ -32,3 +32,12 @@ export async function PUT(req: Request) {
   });
   return NextResponse.json(issue);
 }
+
+export async function PATCH(req: Request) {
+  const { id, status } = await req.json();
+  const issue = await prisma.issue.update({
+    where: { id },
+    data: { status },
+  });
+  return NextResponse.json(issue);
+}

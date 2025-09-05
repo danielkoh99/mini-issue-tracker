@@ -8,7 +8,7 @@ export default function Home() {
   const { data, isLoading, error } = useIssues();
 
   if (isLoading) return <p className="text-gray-500 mt-10">Loading issues…</p>;
-  if (error) return <Error message={error.message} />;
+  if (error) return <Error>{error.message}</Error>;
 
   return (
     <div className="h-full flex flex-col max-w-4xl mx-auto p-6">

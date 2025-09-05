@@ -15,7 +15,15 @@ export const useIssues = () => {
     },
   });
 };
-
+export const useGetSingleIssue = (id: string) => {
+  return useQuery<Issue>({
+    queryKey: ["issues", id],
+    queryFn: async () => {
+      const res = await api.get(`/issues/${id}`);
+      return res.data;
+    },
+  });
+};
 export const useCreateIssue = () => {
   const queryClient = useQueryClient();
 
@@ -35,12 +43,7 @@ export const useUpdateIssue = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: {
-      id: string;
-      title: string;
-      description: string;
-      status: Status;
-    }) => {
+    mutationFn: async (data: Partial<Issue>) => {
       const res = await api.put("/issues", data);
       return res.data;
     },
@@ -50,6 +53,19 @@ export const useUpdateIssue = () => {
   });
 };
 
+export const useUpdateIssueStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { id: string; status: Status }) => {
+      const res = await api.patch("/issues", data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["issues"] });
+    },
+  });
+};
 export const useDeleteIssue = () => {
   const queryClient = useQueryClient();
 

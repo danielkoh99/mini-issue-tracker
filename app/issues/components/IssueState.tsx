@@ -1,5 +1,6 @@
 import { Status } from "@/app/generated/prisma";
 import { useUpdateIssueStatus } from "@/app/hooks/useIssues";
+import { statusColors, statusOptions } from "@/app/types/issue";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,12 +17,6 @@ interface StatusProps {
 
 export const IssueStatus: React.FC<StatusProps> = ({ status, id }) => {
   const { mutate } = useUpdateIssueStatus();
-  const statusColors: Record<Status, string> = {
-    OPEN: "bg-green-100 text-green-800",
-    IN_PROGRESS: "bg-yellow-100 text-yellow-800",
-    CLOSED: "bg-gray-100 text-gray-800",
-  };
-  const options = Object.keys(Status) as Status[];
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -47,10 +42,11 @@ export const IssueStatus: React.FC<StatusProps> = ({ status, id }) => {
       <DropdownMenuContent
         sideOffset={8}
         align="start"
+        className="mb-2"
         onClick={stopPropagation}
       >
         <DropdownMenuLabel>Change status</DropdownMenuLabel>
-        {options.map((option) => (
+        {statusOptions.map((option) => (
           <DropdownMenuItem
             key={option}
             onSelect={handleSelectStatus(option)}

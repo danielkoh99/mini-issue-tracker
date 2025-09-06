@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/axios";
 import { Issue } from "../generated/prisma";
+import { toast } from "sonner";
 
 export type Status = "OPEN" | "IN_PROGRESS" | "CLOSED";
 
@@ -33,6 +34,9 @@ export const useCreateIssue = () => {
       const res = await api.post("/issues", data);
       return res.data;
     },
+    onError: (error: { error: string }) => {
+      toast.error(error.error);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["issues"] });
     },
@@ -47,8 +51,12 @@ export const useUpdateIssue = () => {
       const res = await api.put("/issues", data);
       return res.data;
     },
-    onSuccess: () => {
+    onError: (error: { error: string }) => {
+      toast.error(error.error);
+    },
+    onSuccess: (data: { message: string }) => {
       queryClient.invalidateQueries({ queryKey: ["issues"] });
+      toast.success(data.message);
     },
   });
 };
@@ -60,6 +68,9 @@ export const useUpdateIssueStatus = () => {
     mutationFn: async (data: { id: string; status: Status }) => {
       const res = await api.patch("/issues", data);
       return res.data;
+    },
+    onError: (error: { error: string }) => {
+      toast.error(error.error);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["issues"] });
@@ -73,6 +84,9 @@ export const useDeleteIssue = () => {
     mutationFn: async (id: string) => {
       const res = await api.delete("/issues", { data: { id } });
       return res.data;
+    },
+    onError: (error: { error: string }) => {
+      toast.error(error.error);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["issues"] });

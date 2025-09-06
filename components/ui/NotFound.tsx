@@ -1,11 +1,28 @@
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { AlertCircle } from "lucide-react";
+
 interface NotFoundProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  title?: string;
 }
-export const NotFound: React.FC<NotFoundProps> = ({ children }) => {
+
+export const NotFound: React.FC<NotFoundProps> = ({
+  children,
+  title = "Not Found",
+}) => {
   return (
-    <div className="flex flex-col items-center justify-center p-6 text-center">
-      <h2 className="text-4xl font-bold mb-2 text-gray-800">Not Found</h2>
-      <p className="text-gray-600 mb-4">{children}</p>
+    <div className="flex items-center justify-center py-12">
+      <Card className="max-w-md w-full text-center shadow-lg rounded-2xl">
+        <CardHeader>
+          <div className="flex justify-center mb-2">
+            <AlertCircle className="h-10 w-10 text-muted-foreground" />
+          </div>
+          <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">{children}</p>
+        </CardContent>
+      </Card>
     </div>
   );
 };

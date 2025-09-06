@@ -21,14 +21,14 @@ import { useForm } from "react-hook-form";
 import { IssueUpdateInput, IssueUpdateSchema } from "@/app/types/issue";
 import z from "zod";
 import { Button } from "@/components/ui/button";
+import { EditableField } from "@/components/ui/EditableField";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
-} from "@radix-ui/react-select";
-import { EditableField } from "@/components/ui/EditableField";
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -67,7 +67,6 @@ const IssuePage = () => {
             Go back to Issues
           </Link>
         </p>
-        <h1 className="text-2xl font-bold mb-4">Edit Issue</h1>
       </div>
 
       <Form {...form}>
@@ -88,7 +87,6 @@ const IssuePage = () => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="description"
@@ -107,25 +105,29 @@ const IssuePage = () => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="status"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Status</FormLabel>
-                <FormControl>
-                  <Select {...field}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
+                      <SelectValue placeholder="Select a verified email to display" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="OPEN">Open</SelectItem>
-                      <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                      <SelectItem value="CLOSED">Closed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                  </FormControl>
+                  <SelectContent>
+                    {["OPEN", "IN_PROGRESS", "CLOSED"].map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status.replaceAll("_", " ")}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

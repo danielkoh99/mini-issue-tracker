@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import QueryProvider from "./providers/queryProvider";
 import { Header } from "@/components/ui/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Mini Issue Tracker",
@@ -18,6 +19,7 @@ export default function RootLayout({
         <Header />
         <QueryProvider>
           <main className="flex-1 overflow-auto">{children}</main>
+          <Toaster />
         </QueryProvider>
       </body>
     </html>

@@ -39,7 +39,7 @@ pnpm run dev
 
 ```bash
 pnpm run prisma:generate
-npx prisma migrate dev
+pnpm run prisma:migrate dev
 ```
 
 6. Run the seed script:

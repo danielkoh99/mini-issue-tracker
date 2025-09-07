@@ -49,7 +49,6 @@ const IssuePage = () => {
   } = useGetSingleIssue(id, {
     enabled: !isDeleting && !!id && !disabledQuery,
   });
-  console.log(issue);
   const { mutate: updateIssue } = useUpdateIssue();
 
   const form = useForm<IssueUpdateInput>({

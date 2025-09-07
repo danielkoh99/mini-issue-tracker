@@ -1,5 +1,8 @@
-import { Status } from "@/app/generated/prisma";
-import { IssueCreateSchema } from "@/app/types/issue";
+import {
+  IssueCreateSchema,
+  IssuePatchSchema,
+  IssueUpdateSchemaBackend,
+} from "@/app/types/issue";
 import prisma from "@/prisma/client";
 import { NextResponse } from "next/server";
 
@@ -21,16 +24,16 @@ export async function POST(req: Request) {
   try {
     const json = await req.json();
     const parsed = IssueCreateSchema.safeParse(json);
+
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.message },
+        { error: parsed.error.format() },
         { status: 400 }
       );
     }
 
-    const { title, description, status } = parsed.data;
     const issue = await prisma.issue.create({
-      data: { title, description, status },
+      data: parsed.data,
     });
 
     return NextResponse.json(issue, { status: 201 });
@@ -45,9 +48,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const { id } = await req.json();
-    if (!id) {
-      return NextResponse.json({ error: "Missing issue id" }, { status: 400 });
-    }
+    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
     const issue = await prisma.issue.delete({ where: { id } });
     return NextResponse.json(issue);
@@ -61,17 +62,23 @@ export async function DELETE(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const { id, title, description, status } = await req.json();
-    if (!id) {
-      return NextResponse.json({ error: "Missing issue id" }, { status: 400 });
+    const json = await req.json();
+    const parsed = IssueUpdateSchemaBackend.safeParse(json);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.message },
+        { status: 400 }
+      );
     }
 
+    const { id, ...data } = parsed.data;
     const issue = await prisma.issue.update({
       where: { id },
-      data: { title, description, status },
+      data,
     });
 
-    return NextResponse.json({ message: "Issue updated successfully", issue });
+    return NextResponse.json({ message: "Issue updated", issue });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to update issue", details: String(error) },
@@ -82,17 +89,24 @@ export async function PUT(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    const { id, status } = await req.json();
-    if (!id) {
-      return NextResponse.json({ error: "Missing issue id" }, { status: 400 });
+    const json = await req.json();
+    const parsed = IssuePatchSchema.safeParse(json);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.message },
+        { status: 400 }
+      );
     }
+
+    const { id, status } = parsed.data;
 
     const issue = await prisma.issue.update({
       where: { id },
       data: { status },
     });
 
-    return NextResponse.json({ message: "Issue updated successfully", issue });
+    return NextResponse.json({ message: "Status updated", issue });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to update issue status", details: String(error) },

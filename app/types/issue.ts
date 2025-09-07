@@ -13,6 +13,13 @@ export const IssueUpdateSchema = z.object({
   status: z.enum(Status).optional(),
 });
 
+export const IssueUpdateSchemaBackend = IssueUpdateSchema.extend({
+  id: z.string(),
+});
+export const IssuePatchSchema = z.object({
+  id: z.string(),
+  status: z.enum(Status),
+});
 export type IssueCreateInput = z.infer<typeof IssueCreateSchema>;
 export type IssueUpdateInput = z.infer<typeof IssueUpdateSchema>;
 

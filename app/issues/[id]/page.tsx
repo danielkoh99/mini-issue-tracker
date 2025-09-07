@@ -74,7 +74,7 @@ const IssuePage = () => {
     updateIssue({ id, ...values });
   }
   if (error) return <Error>{error.message}</Error>;
-  if (isLoading) return <IssueSkeleton />;
+  if (isLoading || isDeleting) return <IssueSkeleton />;
   if (!issue) return <NotFound>Issue not found</NotFound>;
 
   return (

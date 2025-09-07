@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/axios";
 import { Issue } from "../generated/prisma";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export type Status = "OPEN" | "IN_PROGRESS" | "CLOSED";
 
@@ -16,8 +17,12 @@ export const useIssues = () => {
     },
   });
 };
-export const useGetSingleIssue = (id: string) => {
+export const useGetSingleIssue = (
+  id: string,
+  options: { enabled?: boolean }
+) => {
   return useQuery<Issue>({
+    enabled: options.enabled,
     queryKey: ["issues", id],
     queryFn: async () => {
       const res = await api.get(`/issues/${id}`);
@@ -79,8 +84,12 @@ export const useUpdateIssueStatus = () => {
 };
 export const useDeleteIssue = () => {
   const queryClient = useQueryClient();
-
+  const router = useRouter();
   return useMutation({
+    onMutate: (id: string) => {
+      queryClient.cancelQueries({ queryKey: ["issues", id], exact: true });
+      queryClient.removeQueries({ queryKey: ["issues", id], exact: true });
+    },
     mutationFn: async (id: string) => {
       const res = await api.delete("/issues", { data: { id } });
       return res.data;
@@ -88,8 +97,13 @@ export const useDeleteIssue = () => {
     onError: (error: { error: string }) => {
       toast.error(error.error);
     },
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
+      router.push("/issues");
+      queryClient.cancelQueries({ queryKey: ["issues", id], exact: true });
+      queryClient.removeQueries({ queryKey: ["issues", id], exact: true });
       queryClient.invalidateQueries({ queryKey: ["issues"] });
+
+      toast.success("Issue deleted successfully");
     },
   });
 };

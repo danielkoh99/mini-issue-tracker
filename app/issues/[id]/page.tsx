@@ -2,7 +2,11 @@
 
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useGetSingleIssue, useUpdateIssue } from "@/app/hooks/useIssues";
+import {
+  useGetSingleIssue,
+  useUpdateIssue,
+  useDeleteIssue,
+} from "@/app/hooks/useIssues";
 import { Status } from "@/app/generated/prisma";
 import { NotFound } from "@/components/ui/NotFound";
 import { Error } from "@/components/ui/Error";
@@ -29,11 +33,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DeleteDialog } from "../components/DeleteDialog";
 const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data: issue, error, isLoading } = useGetSingleIssue(id);
-  const { mutate } = useUpdateIssue();
+  const { mutate: deleteIssue, isPending: isDeleting } = useDeleteIssue();
+  const {
+    data: issue,
+    error,
+    isLoading,
+  } = useGetSingleIssue(id, {
+    enabled: !isDeleting,
+  });
+  const { mutate: updateIssue } = useUpdateIssue();
 
   const form = useForm<IssueUpdateInput>({
     resolver: zodResolver(IssueUpdateSchema),
@@ -53,7 +65,7 @@ const IssuePage = () => {
     }
   }, [issue, form]);
   function onSubmit(values: z.infer<typeof IssueUpdateSchema>) {
-    mutate({ id, ...values });
+    updateIssue({ id, ...values });
   }
   if (error) return <Error>{error.message}</Error>;
   if (isLoading) return <IssueSkeleton />;
@@ -133,10 +145,14 @@ const IssuePage = () => {
             )}
           />
 
-          <div className="flex gap-2">
+          <div className="flex justify-between gap-2">
             <Button type="submit" variant="default">
               Save
             </Button>
+            <DeleteDialog
+              itemName={`issue "${issue.title}"`}
+              onConfirm={() => deleteIssue(issue.id)}
+            />
           </div>
         </form>
       </Form>

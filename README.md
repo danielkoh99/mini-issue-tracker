@@ -6,7 +6,7 @@ Simple issue tracking app with Next.js, Prisma, and ShadCN.
 
 - Node.js ≥ 18
 - pnpm
-- PostgreSQL db set up
+- PostgreSQL db set up in Prisma cloud
 
 ## Setup
 

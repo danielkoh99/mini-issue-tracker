@@ -47,11 +47,7 @@ export const IssueStatus: React.FC<StatusProps> = ({ status, id }) => {
       >
         <DropdownMenuLabel>Change status</DropdownMenuLabel>
         {statusOptions.map((option) => (
-          <DropdownMenuItem
-            key={option}
-            onSelect={handleSelectStatus(option)}
-            className={getStatusColor(option)}
-          >
+          <DropdownMenuItem key={option} onSelect={handleSelectStatus(option)}>
             {option.replaceAll("_", " ")}
           </DropdownMenuItem>
         ))}

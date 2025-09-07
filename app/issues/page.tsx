@@ -4,8 +4,8 @@ import { Error } from "@/components/ui/Error";
 import { useIssues } from "../hooks/useIssues";
 import { IssueItem } from "./components/IssueItem";
 import { IssueListItemSkeleton } from "./components/IssueListItemSkeleton";
-import { Button } from "@/components/ui/button";
 import { NotFound } from "@/components/ui/NotFound";
+import { CreateIssueDialog } from "./components/CreateIssueDialog";
 
 export default function Home() {
   const { data, isLoading, error } = useIssues();
@@ -16,12 +16,7 @@ export default function Home() {
     <div className="h-full flex flex-col max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Issues</h1>
       <div className="flex justify-end mb-4">
-        <Button
-          variant="outline"
-          className="rounded-xl border-cyan-500 text-cyan-600 hover:bg-cyan-50 hover:text-cyan-700 hover:border-cyan-600 transition-colors"
-        >
-          Create Issue
-        </Button>
+        <CreateIssueDialog />
       </div>
       <div className="flex-1 flex flex-col gap-4 overflow-auto">
         {data?.length === 0 && (

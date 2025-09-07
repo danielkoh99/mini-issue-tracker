@@ -23,6 +23,7 @@ export const useGetSingleIssue = (
 ) => {
   return useQuery<Issue>({
     enabled: options.enabled,
+    retry: false,
     queryKey: ["issues", id],
     queryFn: async () => {
       const res = await api.get(`/issues/${id}`);
@@ -86,10 +87,6 @@ export const useDeleteIssue = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
-    onMutate: (id: string) => {
-      queryClient.cancelQueries({ queryKey: ["issues", id], exact: true });
-      queryClient.removeQueries({ queryKey: ["issues", id], exact: true });
-    },
     mutationFn: async (id: string) => {
       const res = await api.delete("/issues", { data: { id } });
       return res.data;
@@ -99,7 +96,6 @@ export const useDeleteIssue = () => {
     },
     onSuccess: (_data, id) => {
       router.push("/issues");
-      queryClient.cancelQueries({ queryKey: ["issues", id], exact: true });
       queryClient.removeQueries({ queryKey: ["issues", id], exact: true });
       queryClient.invalidateQueries({ queryKey: ["issues"] });
 

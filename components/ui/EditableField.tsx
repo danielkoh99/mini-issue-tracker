@@ -39,7 +39,7 @@ export const EditableField = ({
     </>
   ) : (
     <div
-      className="items-center justify-start flex cursor-text border rounded-sm border-gray-200 hover:bg-gray-50 transition-all p-2 min-h-10"
+      className="flex items-start justify-start cursor-text border rounded-sm border-gray-200 hover:bg-gray-50 transition-all p-2 min-h-10 w-full break-words whitespace-pre-wrap max-h-96 overflow-auto"
       onClick={() => setEditing(true)}
     >
       {value || <span className="text-gray-400">Click to edit</span>}

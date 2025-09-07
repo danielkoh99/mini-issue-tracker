@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   useGetSingleIssue,
   useUpdateIssue,
@@ -37,14 +37,18 @@ import { DeleteDialog } from "../components/DeleteDialog";
 const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
 
+  const router = useRouter();
+  const [disabledQuery, setDisabledQuery] = useState(false);
+
   const { mutate: deleteIssue, isPending: isDeleting } = useDeleteIssue();
   const {
     data: issue,
     error,
     isLoading,
   } = useGetSingleIssue(id, {
-    enabled: !isDeleting,
+    enabled: !isDeleting && !!id && !disabledQuery,
   });
+  console.log(issue);
   const { mutate: updateIssue } = useUpdateIssue();
 
   const form = useForm<IssueUpdateInput>({
@@ -64,6 +68,14 @@ const IssuePage = () => {
       });
     }
   }, [issue, form]);
+  function handleDeleteIssue() {
+    deleteIssue(id, {
+      onSuccess: () => {
+        setDisabledQuery(true);
+        router.push("/issues");
+      },
+    });
+  }
   function onSubmit(values: z.infer<typeof IssueUpdateSchema>) {
     updateIssue({ id, ...values });
   }
@@ -84,7 +96,7 @@ const IssuePage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-4 max-w-full"
         >
           <FormField
             control={form.control}
@@ -105,7 +117,7 @@ const IssuePage = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
-                <FormControl>
+                <FormControl className="w-full overflow-auto">
                   <EditableField
                     value={field.value}
                     type="textarea"
@@ -133,7 +145,7 @@ const IssuePage = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {["OPEN", "IN_PROGRESS", "CLOSED"].map((status) => (
+                    {Object.values(Status).map((status) => (
                       <SelectItem key={status} value={status}>
                         {status.replaceAll("_", " ")}
                       </SelectItem>
@@ -151,7 +163,7 @@ const IssuePage = () => {
             </Button>
             <DeleteDialog
               itemName={`issue "${issue.title}"`}
-              onConfirm={() => deleteIssue(issue.id)}
+              onConfirm={handleDeleteIssue}
             />
           </div>
         </form>

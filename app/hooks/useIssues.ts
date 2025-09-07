@@ -2,11 +2,9 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/axios";
-import { Issue } from "../generated/prisma";
+import { Issue, Status } from "../generated/prisma";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-export type Status = "OPEN" | "IN_PROGRESS" | "CLOSED";
 
 export const useIssues = () => {
   return useQuery<Issue[]>({

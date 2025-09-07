@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DeleteDialog } from "../components/DeleteDialog";
+import { StatusSelectContent } from "../components/StatusSelectContent";
 const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -144,13 +145,7 @@ const IssuePage = () => {
                       <SelectValue placeholder="Select a verified email to display" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
-                    {Object.values(Status).map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status.replaceAll("_", " ")}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
+                  <StatusSelectContent />
                 </Select>
                 <FormMessage />
               </FormItem>

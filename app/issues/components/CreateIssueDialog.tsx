@@ -33,6 +33,7 @@ import {
 import { FC, useState } from "react";
 import { IssueCreateSchema } from "@/app/types/issue";
 import { Textarea } from "@/components/ui/textarea";
+import { StatusSelectContent } from "./StatusSelectContent";
 
 type IssueCreateInput = z.infer<typeof IssueCreateSchema>;
 
@@ -116,15 +117,9 @@ export const CreateIssueDialog: FC = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
-                      <SelectContent>
-                        {Object.values(Status)
-                          .filter((status) => status !== Status.CLOSED)
-                          .map((status) => (
-                            <SelectItem key={status} value={status}>
-                              {status.replaceAll("_", " ")}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
+                      <StatusSelectContent
+                        filterFn={(v) => v !== Status.CLOSED}
+                      />
                     </Select>
                   </FormControl>
                   <FormMessage />

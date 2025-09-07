@@ -1,5 +1,5 @@
 import { Issue } from "@/app/generated/prisma";
-import { IssueStatus } from "./IssueState";
+import { IssueStatus } from "./IssueStatus";
 import { useRouter } from "next/navigation";
 interface IssueItemProps {
   issue: Issue;

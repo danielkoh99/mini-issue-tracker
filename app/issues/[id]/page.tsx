@@ -26,13 +26,7 @@ import { IssueUpdateInput, IssueUpdateSchema } from "@/app/types/issue";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import { EditableField } from "@/components/ui/EditableField";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DeleteDialog } from "../components/DeleteDialog";
 import { StatusSelectContent } from "../components/StatusSelectContent";
 const IssuePage = () => {

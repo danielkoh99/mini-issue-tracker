@@ -7,7 +7,7 @@ import { IssueListItemSkeleton } from "./components/IssueListItemSkeleton";
 import { NotFound } from "@/components/ui/NotFound";
 import { CreateIssueDialog } from "./components/CreateIssueDialog";
 
-export default function Home() {
+const Home = () => {
   const { data, isLoading, error } = useIssues();
 
   if (error) return <Error> {error.message}</Error>;
@@ -30,4 +30,5 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+export default Home;

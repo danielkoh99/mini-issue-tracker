@@ -1,5 +1,3 @@
-// components/ui/IssueSkeleton.tsx
-
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const IssueSkeleton = () => {

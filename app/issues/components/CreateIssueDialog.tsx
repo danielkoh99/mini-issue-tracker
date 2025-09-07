@@ -23,13 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCreateIssue } from "@/app/hooks/useIssues";
 import { Status } from "@/app/generated/prisma";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FC, useState } from "react";
 import { IssueCreateSchema } from "@/app/types/issue";
 import { Textarea } from "@/components/ui/textarea";

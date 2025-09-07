@@ -1,0 +1,22 @@
+# Node modules (we install them in the container)
+node_modules
+.pnpm-store
+.pnpm-debug.log
+
+# Next.js build output
+.next
+out
+dist
+
+# Environment variables 
+.env
+.env.local
+.env.development
+.env.production
+
+# OS / IDE files
+.DS_Store
+.vscode
+
+# Prisma generated client (we generate it inside the container)
+node_modules/.prisma

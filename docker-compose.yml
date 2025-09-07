@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_API_TOKEN: ${NEXT_PUBLIC_API_TOKEN}
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      API_TOKEN: ${API_TOKEN}
+      NEXT_PUBLIC_API_TOKEN: ${NEXT_PUBLIC_API_TOKEN}

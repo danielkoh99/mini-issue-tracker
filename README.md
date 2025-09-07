@@ -29,13 +29,9 @@ pnpm install
 cp .env.example .env
 ```
 
-4. Run the development server:
+Then set up the required env vars.
 
-```bash
-pnpm run dev
-```
-
-5. Run Prisma migrations:
+4. Run Prisma generation and migrations:
 
 ```bash
 pnpm run prisma:generate
@@ -46,6 +42,12 @@ pnpm run prisma:migrate dev
 
 ```bash
 pnpm run seed
+```
+
+4. Run the development server:
+
+```bash
+pnpm run dev
 ```
 
 7. Open [http://localhost:3000](http://localhost:3000) with your browser.
@@ -73,14 +75,16 @@ git clone <repo-url>
 cd <repo-folder>
 ```
 
-2. Build the Docker image:
+3. Set up env vars:
 
 ```bash
-docker build -t issue-tracker .
+cp .env.example .env
 ```
 
-3. Run the Docker container:
+Then set up the required env vars.
+
+2. Build and run the Docker container:
 
 ```bash
-docker-compose up -d
+docker-compose up --build -d
 ```

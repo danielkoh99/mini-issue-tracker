@@ -26,6 +26,6 @@ export type IssueUpdateInput = z.infer<typeof IssueUpdateSchema>;
 export const statusColors: Record<Status, string> = {
   OPEN: "bg-green-100 text-green-800",
   IN_PROGRESS: "bg-yellow-100 text-yellow-800",
-  CLOSED: "bg-gray-100 text-gray-800",
+  CLOSED: "bg-gray-300 text-gray-800",
 };
 export const statusOptions = Object.keys(Status) as Status[];

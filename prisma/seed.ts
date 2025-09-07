@@ -54,6 +54,7 @@ const issues = [
   },
 ];
 async function main() {
+  await prisma.issue.deleteMany();
   await prisma.issue.createMany({
     data: issues,
   });

@@ -6,10 +6,7 @@ interface NotFoundProps {
   title?: string;
 }
 
-export const NotFound: React.FC<NotFoundProps> = ({
-  children,
-  title = "Not Found",
-}) => {
+export const NotFound: React.FC<NotFoundProps> = ({ children, title }) => {
   return (
     <div className="flex items-center justify-center py-12 w-full">
       <Card className="w-full text-center shadow-lg rounded-2xl">

@@ -74,9 +74,8 @@ const IssuePage = () => {
     updateIssue({ id, ...values });
   }
   if (error) return <Error>{error.message}</Error>;
-  if (isLoading || isDeleting) return <IssueSkeleton />;
-  if (!issue) return <NotFound>Issue not found</NotFound>;
-
+  if (isLoading) return <IssueSkeleton />;
+  if (!issue) return <NotFound title="Not found">Issue not found</NotFound>;
   return (
     <div className="max-w-3xl mx-auto p-6">
       <div className="flex flex-col justify-between items-start mb-4">
@@ -158,7 +157,7 @@ const IssuePage = () => {
       </Form>
 
       <p className="text-gray-500 text-sm mt-4">
-        Created: {new Date(issue.createdAt).toLocaleString()} | Updated:{" "}
+        Created: {new Date(issue.createdAt).toLocaleString()} | Updated:
         {new Date(issue.updatedAt).toLocaleString()}
       </p>
     </div>

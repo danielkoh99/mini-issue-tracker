@@ -20,7 +20,7 @@ const Home = () => {
       </div>
       <div className="flex-1 flex flex-col gap-4 overflow-auto">
         {data?.length === 0 && (
-          <NotFound>There are no issues to display</NotFound>
+          <NotFound title="No issues">There are no issues to display</NotFound>
         )}
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (

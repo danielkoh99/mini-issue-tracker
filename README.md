@@ -1,6 +1,22 @@
 # Issue Tracker
 
-Simple issue tracking app with Next.js, Prisma, and ShadCN.
+A minimal issue-tracking web app (like a micro-Jira) built as part of a frontend developer interview.
+
+### Tech stack:
+	•	Next.js (App Router)
+	•	TypeScript
+	•	Prisma (Postgres/SQLite)
+	•	REST API
+	•	shadcn/ui
+
+The project also includes a Docker and Docker Compose setup for seamless local development and easy deployment.
+
+
+## Core features
+	•	Create / list / update / close issues
+	•	Issue fields: title, description, status (open/in-progress/closed), priority, assignee (optional), createdAt, updatedAt
+	•	Simple hardcoded auth for API
+	•	Responsive UI with accessible components from shadcn/ui
 
 ## Prerequisites
 
@@ -13,8 +29,8 @@ Simple issue tracking app with Next.js, Prisma, and ShadCN.
 1. Clone the repo:
 
 ```bash
-git clone <repo-url>
-cd <repo-folder>
+git clone https://github.com/danielkoh99/mini-issue-tracker.git
+cd mini-issue-tracker
 ```
 
 2. Install dependencies:

@@ -32,8 +32,6 @@ import { StatusSelectContent } from "../components/StatusSelectContent";
 const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const router = useRouter();
-
   const { mutate: deleteIssue } = useDeleteIssue();
   const {
     data: issue,

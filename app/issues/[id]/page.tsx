@@ -33,16 +33,13 @@ const IssuePage = () => {
   const { id } = useParams<{ id: string }>();
 
   const router = useRouter();
-  const [disabledQuery, setDisabledQuery] = useState(false);
 
-  const { mutate: deleteIssue, isPending: isDeleting } = useDeleteIssue();
+  const { mutate: deleteIssue } = useDeleteIssue();
   const {
     data: issue,
     error,
     isLoading,
-  } = useGetSingleIssue(id, {
-    enabled: !isDeleting && !!id && !disabledQuery,
-  });
+  } = useGetSingleIssue(id);
   const { mutate: updateIssue } = useUpdateIssue();
 
   const form = useForm<IssueUpdateInput>({
@@ -63,12 +60,7 @@ const IssuePage = () => {
     }
   }, [issue, form]);
   function handleDeleteIssue() {
-    deleteIssue(id, {
-      onSuccess: () => {
-        setDisabledQuery(true);
-        router.push("/issues");
-      },
-    });
+    deleteIssue(id);
   }
   function onSubmit(values: z.infer<typeof IssueUpdateSchema>) {
     updateIssue({ id, ...values });

@@ -17,10 +17,8 @@ export const useIssues = () => {
 };
 export const useGetSingleIssue = (
   id: string,
-  options: { enabled?: boolean }
 ) => {
   return useQuery<Issue>({
-    enabled: options.enabled,
     retry: false,
     queryKey: ["issues", id],
     queryFn: async () => {
@@ -82,7 +80,6 @@ export const useUpdateIssueStatus = () => {
   });
 };
 export const useDeleteIssue = () => {
-  const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
     mutationFn: async (id: string) => {
@@ -92,11 +89,8 @@ export const useDeleteIssue = () => {
     onError: (error: { error: string }) => {
       toast.error(error.error);
     },
-    onSuccess: (_data, id) => {
+    onSuccess: () => {
       router.push("/issues");
-      queryClient.removeQueries({ queryKey: ["issues", id], exact: true });
-      queryClient.invalidateQueries({ queryKey: ["issues"] });
-
       toast.success("Issue deleted successfully");
     },
   });
